@@ -1,26 +1,26 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/yddeng/webhook"
-	"io/ioutil"
+	"github.com/yddeng/webhook/conf"
 	"net/http"
 	"os"
-	"strings"
 )
 
 func main() {
 	if len(os.Args) < 1 {
-		fmt.Printf("usage addr\n")
+		fmt.Printf("usage consif\n")
 		return
 	}
 
-	addr := os.Args[1]
-	fmt.Printf("webhook start on %s\n", addr)
+	conf.LoadConfig(os.Args[1])
+	config := conf.GetConfig()
+
+	fmt.Printf("webhook start on %s\n", config.NetAddr)
 
 	http.HandleFunc("/githook", webhook.GitHook)
-	err := http.ListenAndServe(addr, nil)
+	err := http.ListenAndServe(config.NetAddr, nil)
 	if err != nil {
 		fmt.Println(err)
 	}
