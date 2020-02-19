@@ -1,0 +1,1 @@
+ nohup bin/webhook ./config.toml > webhook.log 2>&1 &

@@ -1,0 +1,8 @@
+NetAddr = ":42000" // hook 地址
+
+Token   = "token"  // token
+
+
+[[Robot]]          # 企业微信机器人
+Url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=c87934ca-d9ea-412b-97f0-8f8f0907ba3e"
+
