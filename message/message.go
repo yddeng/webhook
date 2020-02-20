@@ -4,7 +4,7 @@ import "fmt"
 
 var (
 	push_tmp = `**%s**  通知:
-<font color="info">%s</font> 在分支 <font color="info">%s</font> 上的推送消息。`
+<font color="info">%s</font> 推送了提交到 <font color="info">%s</font> 分支。`
 
 	merge_open_tmp = `**%s**  通知:
 <font color="info">%s</font> 创建了从 <font color="info">%s</font> 到 <font color="info">%s</font> 的合并请求。`
@@ -13,7 +13,7 @@ var (
 <font color="info">%s</font> 关闭了从 <font color="info">%s</font> 到 <font color="info">%s</font> 的合并请求。`
 
 	merge_merge_tmp = `**%s**  通知:
-<font color="info">%s</font> 合并了从 <font color="info">%s</font> 到 <font color="info">%s</font> 的合并请求。`
+<font color="info">%s</font> 通过了从 <font color="info">%s</font> 到 <font color="info">%s</font> 的合并请求。`
 )
 
 func MakePushMsg(project, name, branch string) string {

@@ -7,9 +7,9 @@ AccessToken   = "feiyu2020"  # token
 
 [[Robot]]          # 机器人
 Name = "teacher"
-Url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=c87934ca-d9ea-412b-97f0-8f8f0907ba3e"
+Url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b9430cba-acd0-412e-92ac-367aeb450022"
 
 [[Robot]]          # 机器人
 Name = "documents"
-Url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=c87934ca-d9ea-412b-97f0-8f8f0907ba3e"
+Url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b9430cba-acd0-412e-92ac-367aeb450022"
 
