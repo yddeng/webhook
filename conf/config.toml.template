@@ -9,3 +9,7 @@ AccessToken   = "feiyu2020"  # token
 Name = "teacher"
 Url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=c87934ca-d9ea-412b-97f0-8f8f0907ba3e"
 
+[[Robot]]          # 机器人
+Name = "documents"
+Url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=c87934ca-d9ea-412b-97f0-8f8f0907ba3e"
+

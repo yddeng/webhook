@@ -6,6 +6,11 @@ gitlab 与 企业微信机器人
 - push
 - merge_request
 
+teacher message:
+**deng** merged _dev_ to _master_ 。
+
+
+
 map[Connection:[close] Content-Length:[2336] Content-Type:[application/json] X-Gitlab-Event:[Push Hook] X-Gitlab-Token:[feiyu2020]]
 ------------
 

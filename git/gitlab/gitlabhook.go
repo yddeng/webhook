@@ -42,9 +42,9 @@ func GitlabHook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var f interface{}
-	_ = json.Unmarshal(data, &f)
-	fmt.Println(f)
+	//var f interface{}
+	//_ = json.Unmarshal(data, &f)
+	//fmt.Println(f)
 
 	switch event {
 	case "Push Hook":
@@ -99,7 +99,7 @@ func PushEvent(data []byte) {
 	sp := strings.Split(hook.Ref, "/")
 	branch := sp[len(sp)-1]
 	msg := message.MakePushMsg(hook.Repository.Name, hook.UserUsername, branch)
-	weixin.SendToClient(msg)
+	weixin.SendToClient(hook.Repository.Name, msg)
 }
 
 type GitlabMergeRequest struct {
@@ -128,9 +128,11 @@ func MergeEvent(data []byte) {
 		return
 	}
 
+	//action : open close merge
+
 	fmt.Println(hook)
 
 	msg := message.MakeMergeMsg(hook.Repository.Name, hook.ObjectAttributes.Action, hook.User.Username,
 		hook.ObjectAttributes.SourceBranch, hook.ObjectAttributes.TargetBranch)
-	weixin.SendToClient(msg)
+	weixin.SendToClient(hook.Repository.Name, msg)
 }

@@ -31,6 +31,7 @@ func LoadConfig(path string) {
 		panic(err)
 	}
 	fmt.Println(config)
+	fmt.Println(config.Robot)
 }
 
 func GetConfig() *Config {
