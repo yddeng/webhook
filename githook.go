@@ -43,7 +43,8 @@ type Webhook struct {
 	TotalCommitsCount int
 }
 
-func GitHook(w http.ResponseWriter, r *http.Request) {
+// gitlab
+func GitlabHook(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
 
 	if r.Method != "POST" {
@@ -58,22 +59,32 @@ func GitHook(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(r.Header)
 
+	// access验证
+	event := r.Header.Get("X-Gitlab-Event")
+	token := r.Header.Get("X-Gitlab-Token")
+	if event == "" || !VerifyAccess("", token) {
+		fmt.Println("wrong x-gitlab-event OR x-gitlab-token")
+		return
+	}
+
+	// 检测事件
+
 	var hook Webhook
 
 	//read request body
 	var data, err = ioutil.ReadAll(r.Body)
 	if err != nil {
-		fmt.Printf("Failed to read request: %s", err)
+		fmt.Printf("Failed to read request: %s\n", err)
 		return
 	}
 
 	//unmarshal request body
 	err = json.Unmarshal(data, &hook)
 	if err != nil {
-		fmt.Printf("Failed to parse request: %s", err)
+		fmt.Printf("Failed to parse request: %s\n", err)
 		return
 	}
-
+	fmt.Println("------------")
 	fmt.Println(hook)
 
 	var f interface{}

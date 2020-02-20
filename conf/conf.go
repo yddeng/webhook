@@ -3,9 +3,15 @@ package conf
 import "github.com/BurntSushi/toml"
 
 type Config struct {
-	NetAddr string `toml:"NetAddr"`
-	Token   string `toml:"Token"`
+	NetAddr string   `toml:"NetAddr"`
+	Access  *Access  `toml:"Access"`
+	Command []string `toml:"Command"`
 	Robot   []*Robot
+}
+
+type Access struct {
+	AccessIP    []string `toml:"AccessIp"`
+	AccessToken string   `toml:"AccessToken"`
 }
 
 type Robot struct {

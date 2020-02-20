@@ -1,6 +1,10 @@
-NetAddr = ":42000" // hook 地址
+NetAddr = ":42000" # hook 地址
 
-Token   = "token"  // token
+[Access]
+AccessIP = []
+AccessToken   = "feiyu2020"  # token
+
+Command = ["push","merge_request"] # 支持命令
 
 
 [[Robot]]          # 企业微信机器人
