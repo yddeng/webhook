@@ -1,6 +1,9 @@
 package conf
 
-import "github.com/BurntSushi/toml"
+import (
+	"fmt"
+	"github.com/BurntSushi/toml"
+)
 
 type Config struct {
 	NetAddr string   `toml:"NetAddr"`
@@ -15,7 +18,8 @@ type Access struct {
 }
 
 type Robot struct {
-	Url string `toml:"Url"`
+	Name string `toml:"Name"`
+	Url  string `toml:"Url"`
 }
 
 var config *Config
@@ -26,6 +30,7 @@ func LoadConfig(path string) {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println()
 }
 
 func GetConfig() *Config {

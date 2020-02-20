@@ -8,5 +8,6 @@ Command = ["push","merge_request"] # 支持命令
 
 
 [[Robot]]          # 企业微信机器人
+Name = "teacher"
 Url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=c87934ca-d9ea-412b-97f0-8f8f0907ba3e"
 

@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/yddeng/webhook"
 	"github.com/yddeng/webhook/conf"
+	"github.com/yddeng/webhook/git/gitlab"
 	"net/http"
 	"os"
 )
@@ -19,7 +19,7 @@ func main() {
 
 	fmt.Printf("webhook start on %s\n", config.NetAddr)
 
-	http.HandleFunc("/githook", webhook.GitHook)
+	http.HandleFunc("/githook", gitlab.GitlabHook)
 	err := http.ListenAndServe(config.NetAddr, nil)
 	if err != nil {
 		fmt.Println(err)

@@ -1,4 +1,4 @@
-package webhook
+package access
 
 import "github.com/yddeng/webhook/conf"
 
