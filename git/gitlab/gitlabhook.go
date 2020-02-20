@@ -42,6 +42,10 @@ func GitlabHook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var f interface{}
+	_ = json.Unmarshal(data, &f)
+	fmt.Println(f)
+
 	switch event {
 	case "Push Hook":
 		if core.VerifyCommand("push") {

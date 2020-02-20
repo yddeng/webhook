@@ -27,8 +27,9 @@ type Message struct {
 func SendToClient(msg string) {
 	req := Message{MsgType: "text",
 		Text: map[string]string{"content": msg}}
+	fmt.Println(req)
 
-	robots := conf.GetConfig().Robot
+	/*robots := conf.GetConfig().Robot
 	for _, r := range robots {
 		resp, err := util.PostJson(r.Url, req, 0)
 		if err != nil {
@@ -41,5 +42,5 @@ func SendToClient(msg string) {
 		}
 		fmt.Printf("sendToClient name:%s ok\n", r.Name)
 	}
-
+	*/
 }
