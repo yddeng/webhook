@@ -25,7 +25,7 @@ func GitlabHook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Access-Control-Allow-Headers", "Content-Type") //header的类型
 	w.Header().Set("content-type", "application/json")             //返回数据格式是json
 
-	fmt.Println(r.Header, r.RemoteAddr)
+	//fmt.Println(r.Header, r.RemoteAddr)
 
 	// access验证
 	event := r.Header.Get("X-Gitlab-Event")
@@ -58,10 +58,8 @@ func GitlabHook(w http.ResponseWriter, r *http.Request) {
 }
 
 type GitlabRepository struct {
-	Name        string `json:"name"`
-	URL         string `json:"url"`
-	Description string `json:"description"`
-	Home        string `json:"home"`
+	Name string `json:"name"`
+	URL  string `json:"url"`
 }
 
 type Commit struct {
