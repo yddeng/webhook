@@ -2,8 +2,6 @@ package weixin
 
 import (
 	"fmt"
-	"github.com/yddeng/webhook/conf"
-	"github.com/yddeng/webhook/util"
 )
 
 /*

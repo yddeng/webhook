@@ -110,6 +110,7 @@ type GitlabMergeRequest struct {
 }
 
 type ObjectAttributes struct {
+	Action       string `json:"action"`
 	SourceBranch string `json:"source_branch"`
 	TargetBranch string `json:"target_branch"`
 }

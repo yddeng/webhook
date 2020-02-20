@@ -12,13 +12,13 @@ func MakePushMsg(project, name, branch string) string {
 	return str
 }
 
-func MakeMergeMsg(project, name, s_branch, t_branch string) string {
+func MakeMergeMsg(project, action, name, s_branch, t_branch string) string {
 	str := `项目:%s 合并请求
-事件:MergeRequest
+动作:%s
 提交者: %s
 源分支: %s
 目标分支: %s`
 
-	str = fmt.Sprintf(str, project, name, s_branch, t_branch)
+	str = fmt.Sprintf(str, project, action, name, s_branch, t_branch)
 	return str
 }
