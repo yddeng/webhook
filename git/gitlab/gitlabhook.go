@@ -130,7 +130,7 @@ func MergeEvent(data []byte) {
 
 	fmt.Println(hook)
 
-	msg := message.MakeMergeMsg(hook.Repository.Name, hook.User.Username,
+	msg := message.MakeMergeMsg(hook.Repository.Name, hook.ObjectAttributes.Action, hook.User.Username,
 		hook.ObjectAttributes.SourceBranch, hook.ObjectAttributes.TargetBranch)
 	weixin.SendToClient(msg)
 }
