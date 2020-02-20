@@ -1,4 +1,4 @@
-package access
+package core
 
 import "github.com/yddeng/webhook/conf"
 
@@ -9,14 +9,14 @@ func VerifyAccess(ip, token string) bool {
 		return false
 	}
 
-	/*if len(access.AccessIP) != 0 {
+	if len(access.AccessIP) != 0 {
 		for _, ip_ := range access.AccessIP {
 			if ip_ != "" && ip == ip_ {
 				return true
 			}
 		}
 		return false
-	}*/
+	}
 
 	return true
 }

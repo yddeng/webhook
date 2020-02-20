@@ -30,7 +30,7 @@ func LoadConfig(path string) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println()
+	fmt.Println(config)
 }
 
 func GetConfig() *Config {

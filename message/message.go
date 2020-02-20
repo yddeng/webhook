@@ -2,27 +2,23 @@ package message
 
 import "fmt"
 
-/*
-  push
-	项目:xxx
-	事件:Push
-	提交者: xxx
-	分支: xxx
-	提交次数:x
-
-  merge
-	项目xxx收到一次MergeRequest请求
-	xxx请求合并分支xxx到xxx
-	时间:
-*/
-
-func MakePushMsg(project, name, branch string, count int) string {
-	str := `项目:%s
+func MakePushMsg(project, name, branch string) string {
+	str := `项目:%s 推送通知
 	事件:Push
 	提交者: %s
-	分支: %s
-	提交次数:%d`
+	分支: %s`
 
-	str = fmt.Sprintf(str, project, name, branch, count)
+	str = fmt.Sprintf(str, project, name, branch)
+	return str
+}
+
+func MakeMergeMsg(project, name, s_branch, t_branch string) string {
+	str := `项目:%s 合并请求
+	事件:MergeRequest
+	提交者: %s
+	源分支: %s
+	目标分支: %s`
+
+	str = fmt.Sprintf(str, project, name, s_branch, t_branch)
 	return str
 }

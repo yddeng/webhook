@@ -30,7 +30,7 @@ func SendToClient(msg string) {
 	/*
 		robots := conf.GetConfig().Robot
 		for _, r := range robots {
-			resp, err := dhttp.PostJson(r.Url, req, 0)
+			resp, err := util.PostJson(r.Url, req, 0)
 			if err != nil {
 				fmt.Printf("sendToClient name:%s err:%s\n", r.Name, err)
 				continue
@@ -41,6 +41,6 @@ func SendToClient(msg string) {
 			}
 			fmt.Printf("sendToClient name:%s ok\n", r.Name)
 		}
-	*/
 
+	*/
 }
