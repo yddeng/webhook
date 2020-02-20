@@ -38,7 +38,7 @@ type Message struct {
 func SendToClient(name, msg string) {
 	req := Message{MsgType: "markdown",
 		Markdown: map[string]string{"content": msg}}
-	fmt.Println(req)
+	//fmt.Println(req)
 
 	robots := conf.GetConfig().Robot
 	for _, r := range robots {
