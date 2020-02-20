@@ -31,7 +31,10 @@ func LoadConfig(path string) {
 		panic(err)
 	}
 	fmt.Println(config)
-	fmt.Println(config.Robot)
+	fmt.Println("access", *config.Access)
+	for _, r := range config.Robot {
+		fmt.Println("robot", r)
+	}
 }
 
 func GetConfig() *Config {
