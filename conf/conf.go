@@ -6,20 +6,17 @@ import (
 )
 
 type Config struct {
-	NetAddr string   `toml:"NetAddr"`
-	Access  *Access  `toml:"Access"`
-	Command []string `toml:"Command"`
-	Robot   []*Robot
-}
-
-type Access struct {
+	NetAddr     string   `toml:"NetAddr"`
 	AccessIP    []string `toml:"AccessIp"`
 	AccessToken string   `toml:"AccessToken"`
+	Robot       []*Robot
 }
 
 type Robot struct {
-	Name string `toml:"Name"`
-	Url  string `toml:"Url"`
+	RobotType string   `toml:"RobotType"`
+	Homepage  string   `toml:"Homepage"`
+	RobotUrl  string   `toml:"RobotUrl"`
+	NotifyCmd []string `toml:"NotifyCmd"`
 }
 
 var config *Config
@@ -31,9 +28,8 @@ func LoadConfig(path string) {
 		panic(err)
 	}
 	fmt.Println(config)
-	fmt.Println("access", *config.Access)
 	for _, r := range config.Robot {
-		fmt.Println("robot", r)
+		fmt.Println("Robot", r)
 	}
 }
 

@@ -1,15 +1,13 @@
-NetAddr = ":42000"            # hook 地址
-Command = ["push","merge_request"] # 命令 merge_request push
+NetAddr     = ":42000"      # hook 地址
+AccessIP    = []            # IP白名单
+AccessToken = "feiyu2020"   # token
 
-[Access]
-AccessIP = []
-AccessToken   = "feiyu2020"  # token
+[[Robot]]
+RobotType   = "workweixin"
+Homepage    = "https://tech.feiyuapi.com/feiyu/teacher"
+RobotUrl    = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b9430cba-acd0-412e-92ac-367aeb450022"
+NotifyCmd   = ["push","merge_request"]  # 通知到机器人的事件
 
-[[Robot]]          # 机器人
-Name = "teacher"
-Url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b9430cba-acd0-412e-92ac-367aeb450022"
-
-[[Robot]]          # 机器人
-Name = "documents"
-Url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b9430cba-acd0-412e-92ac-367aeb450022"
-
+[[Event]]
+Homepage    = "https://tech.feiyuapi.com/feiyu/teacher"
+Commands    = ["push"]

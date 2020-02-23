@@ -1,9 +1,14 @@
-package core
+package verify
 
-import "github.com/yddeng/webhook/conf"
+import (
+	"github.com/yddeng/webhook/conf"
+	"strings"
+)
 
-func VerifyAccess(ip, token string) bool {
+func VerifyAccess(addr, token string) bool {
 	access := conf.GetConfig().Access
+
+	ip := strings.Split(addr, ":")[0]
 
 	if access.AccessToken != "" && token != access.AccessToken {
 		return false

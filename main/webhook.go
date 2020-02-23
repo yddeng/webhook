@@ -19,7 +19,7 @@ func main() {
 
 	fmt.Printf("webhook start on %s\n", config.NetAddr)
 
-	http.HandleFunc("/githook", gitlab.GitlabHook)
+	http.HandleFunc("/githook", gitlab.Hook)
 	err := http.ListenAndServe(config.NetAddr, nil)
 	if err != nil {
 		fmt.Println(err)

@@ -1,8 +1,9 @@
-package weixin
+package workweixin
 
 import (
 	"fmt"
 	"github.com/yddeng/webhook/conf"
+	"github.com/yddeng/webhook/core/robot"
 	"github.com/yddeng/webhook/util"
 )
 
@@ -35,7 +36,12 @@ type Message struct {
 	Markdown map[string]string `json:"markdown"`
 }
 
-func SendToClient(name, msg string) {
+type Robot struct {
+	name string
+	url  string
+}
+
+func (this *Robot) SendToClient(name, msg string) {
 	req := Message{MsgType: "markdown",
 		Markdown: map[string]string{"content": msg}}
 	//fmt.Println(req)
@@ -56,4 +62,26 @@ func SendToClient(name, msg string) {
 		}
 	}
 
+}
+
+type WeixinMaker struct {
+	name string
+}
+
+func (this *WeixinMaker) Type() string {
+	return this.name
+}
+
+func (this *WeixinMaker) Make(url string) *Robot {
+	return &Robot{
+		name: this.name,
+		url:  url,
+	}
+}
+
+func init() {
+	m := &WeixinMaker{
+		name: "weixinwork",
+	}
+	robot.RegisterMaker(m)
 }

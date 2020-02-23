@@ -3,16 +3,16 @@ package gitlab
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/yddeng/webhook/core"
-	"github.com/yddeng/webhook/message"
-	"github.com/yddeng/webhook/robot/weixin"
+	"github.com/yddeng/webhook/core/message"
+	"github.com/yddeng/webhook/core/robot/workweixin"
+	"github.com/yddeng/webhook/core/verify"
 	"io/ioutil"
 	"net/http"
 	"strings"
 )
 
 // gitlab
-func GitlabHook(w http.ResponseWriter, r *http.Request) {
+func Hook(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
 
 	if r.Method != "POST" {
@@ -31,7 +31,7 @@ func GitlabHook(w http.ResponseWriter, r *http.Request) {
 	event := r.Header.Get("X-Gitlab-Event")
 	token := r.Header.Get("X-Gitlab-Token")
 	ip := strings.Split(r.RemoteAddr, ":")[0]
-	if event == "" || !core.VerifyAccess(ip, token) {
+	if event == "" || !verify.VerifyAccess(ip, token) {
 		fmt.Println("wrong x-gitlab-event OR x-gitlab-token")
 		return
 	}
@@ -48,11 +48,11 @@ func GitlabHook(w http.ResponseWriter, r *http.Request) {
 
 	switch event {
 	case "Push Hook":
-		if core.VerifyCommand("push") {
+		if verify.VerifyCommand("push") {
 			PushEvent(data)
 		}
 	case "Merge Request Hook":
-		if core.VerifyCommand("merge_request") {
+		if verify.VerifyCommand("merge_request") {
 			MergeEvent(data)
 		}
 	default:
@@ -62,8 +62,8 @@ func GitlabHook(w http.ResponseWriter, r *http.Request) {
 }
 
 type GitlabRepository struct {
-	Name string `json:"name"`
-	URL  string `json:"url"`
+	Name     string `json:"name"`
+	Homepage string `json:"homepage"`
 }
 
 type Commit struct {
@@ -99,7 +99,7 @@ func PushEvent(data []byte) {
 	sp := strings.Split(hook.Ref, "/")
 	branch := sp[len(sp)-1]
 	msg := message.MakePushMsg(hook.Repository.Name, hook.UserUsername, branch)
-	weixin.SendToClient(hook.Repository.Name, msg)
+	workweixin.SendToClient(hook.Repository.Name, msg)
 }
 
 type GitlabMergeRequest struct {
@@ -134,5 +134,5 @@ func MergeEvent(data []byte) {
 
 	msg := message.MakeMergeMsg(hook.Repository.Name, hook.ObjectAttributes.Action, hook.User.Username,
 		hook.ObjectAttributes.SourceBranch, hook.ObjectAttributes.TargetBranch)
-	weixin.SendToClient(hook.Repository.Name, msg)
+	workweixin.SendToClient(hook.Repository.Name, msg)
 }
