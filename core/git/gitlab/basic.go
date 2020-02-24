@@ -11,6 +11,7 @@ type GitLabObj struct {
 	Message          string        `json:"message"`
 	UserId           int           `json:"user_id"`
 	Username         string        `json:"username"`
+	UserUsername     string        `json:"user_username"`
 	UserEmail        string        `json:"user_email"`
 	ProjectId        int           `json:"project_id"`
 	Repository       GitRepository `json:"repository"`
@@ -154,16 +155,3 @@ type GitSnippet struct {
 	Type            string    `json:"type"`
 	VisibilityLevel int       `json:"visibility_level"`
 }
-
-const (
-	ObjectKindPush    = "push"
-	ObjectKindTagPush = "tag_push"
-	ObjectKindIssue   = "issue"
-	ObjectKindNote    = "note"
-	ObjectKindMerge   = "merge_request"
-
-	NoteableTypeCommit  = "Commit"
-	NoteableTypeMerge   = "MergeRequest"
-	NoteableTypeIssue   = "Issue"
-	NoteableTypeSnippet = "Snippet"
-)

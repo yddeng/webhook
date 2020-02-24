@@ -2,13 +2,10 @@ package verify
 
 import (
 	"github.com/yddeng/webhook/conf"
-	"strings"
 )
 
-func VerifyAccess(addr, token string) bool {
-	access := conf.GetConfig().Access
-
-	ip := strings.Split(addr, ":")[0]
+func VerifyAccess(ip, token string) bool {
+	access := conf.GetConfig()
 
 	if access.AccessToken != "" && token != access.AccessToken {
 		return false
@@ -24,15 +21,4 @@ func VerifyAccess(addr, token string) bool {
 	}
 
 	return true
-}
-
-func VerifyCommand(cmd string) bool {
-	cmds := conf.GetConfig().Command
-
-	for _, c := range cmds {
-		if c == cmd {
-			return true
-		}
-	}
-	return false
 }

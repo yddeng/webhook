@@ -3,15 +3,34 @@ package gitlab
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/yddeng/webhook/core/message"
-	"github.com/yddeng/webhook/core/robot/workweixin"
+	"github.com/yddeng/webhook/core/event"
+	"github.com/yddeng/webhook/core/robot"
 	"github.com/yddeng/webhook/core/verify"
 	"io/ioutil"
 	"net/http"
 	"strings"
 )
 
-// gitlab
+// Header constants
+const (
+	XGitlabToken = "X-Gitlab-Token"
+	XGitlabEvent = "X-Gitlab-Event"
+	GitlabName   = "gitlab"
+)
+
+const (
+	GitlabPushEvent         = "Push Hook"
+	GitlabMergeRequestEvent = "Merge Request Hook"
+)
+
+type GitlabHook struct {
+	name string
+}
+
+var gitlabHook = &GitlabHook{
+	name: GitlabName,
+}
+
 func Hook(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
 
@@ -20,19 +39,12 @@ func Hook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//跨域
-	w.Header().Set("Access-Control-Allow-Origin", "*")             //允许访问所有域
-	w.Header().Add("Access-Control-Allow-Headers", "Content-Type") //header的类型
-	w.Header().Set("content-type", "application/json")             //返回数据格式是json
-
-	//fmt.Println(r.Header, r.RemoteAddr)
-
 	// access验证
-	event := r.Header.Get("X-Gitlab-Event")
-	token := r.Header.Get("X-Gitlab-Token")
+	event := r.Header.Get(XGitlabEvent)
+	token := r.Header.Get(XGitlabToken)
 	ip := strings.Split(r.RemoteAddr, ":")[0]
 	if event == "" || !verify.VerifyAccess(ip, token) {
-		fmt.Println("wrong x-gitlab-event OR x-gitlab-token")
+		fmt.Println("error x-gitlab-event OR x-gitlab-token")
 		return
 	}
 
@@ -42,23 +54,52 @@ func Hook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//var f interface{}
-	//_ = json.Unmarshal(data, &f)
-	//fmt.Println(f)
+	var f interface{}
+	_ = json.Unmarshal(data, &f)
+	fmt.Println(f)
+
+	var obj GitLabObj
+	err = json.Unmarshal(data, &obj)
+	if err != nil {
+		fmt.Printf("Failed to parse request: %s\n", err)
+		return
+	}
+	fmt.Println(obj)
 
 	switch event {
-	case "Push Hook":
-		if verify.VerifyCommand("push") {
-			PushEvent(data)
-		}
-	case "Merge Request Hook":
-		if verify.VerifyCommand("merge_request") {
-			MergeEvent(data)
-		}
+	case GitlabPushEvent:
+		PushEvent(obj)
+	case GitlabMergeRequestEvent:
+		MergeEvent(obj)
 	default:
 		fmt.Printf("event invaild %s\n", event)
 	}
 
+}
+
+func PushEvent(obj GitLabObj) {
+
+	sp := strings.Split(obj.Ref, "/")
+	branch := sp[len(sp)-1]
+
+	args := []string{obj.Repository.Name, obj.UserUsername, branch}
+
+	robot.PushEvent(&robot.Event{
+		Homepage: obj.Repository.Homepage,
+		Cmd:      event.PushEvent,
+		Args:     args,
+	})
+}
+
+func MergeEvent(obj GitLabObj) {
+	args := []string{obj.Repository.Name, obj.ObjectAttributes.Action, obj.User.Username,
+		obj.MergeRequest.SourceBranch, obj.MergeRequest.TargetBranch}
+
+	robot.PushEvent(&robot.Event{
+		Homepage: obj.Repository.Homepage,
+		Cmd:      event.MergeRequest,
+		Args:     args,
+	})
 }
 
 type GitlabRepository struct {
@@ -80,32 +121,11 @@ type Author struct {
 }
 
 type GitlabPush struct {
-	ObjectKind   string           `json:"object_kind"`
-	Ref          string           `json:"ref"`
-	UserUsername string           `json:"user_username"`
-	Repository   GitlabRepository `json:"repository"`
-}
-
-func PushEvent(data []byte) {
-	var hook GitlabPush
-	err := json.Unmarshal(data, &hook)
-	if err != nil {
-		fmt.Printf("Failed to parse request: %s\n", err)
-		return
-	}
-
-	fmt.Println(hook)
-
-	sp := strings.Split(hook.Ref, "/")
-	branch := sp[len(sp)-1]
-	msg := message.MakePushMsg(hook.Repository.Name, hook.UserUsername, branch)
-	workweixin.SendToClient(hook.Repository.Name, msg)
-}
-
-type GitlabMergeRequest struct {
 	ObjectKind       string           `json:"object_kind"`
-	ObjectAttributes ObjectAttributes `json:"object_attributes"`
+	Ref              string           `json:"ref"`
+	UserUsername     string           `json:"user_username"`
 	Repository       GitlabRepository `json:"repository"`
+	ObjectAttributes ObjectAttributes `json:"object_attributes"`
 	User             User             `json:"user"`
 }
 
@@ -118,21 +138,4 @@ type ObjectAttributes struct {
 type User struct {
 	Name     string `json:"name"`
 	Username string `json:"username"`
-}
-
-func MergeEvent(data []byte) {
-	var hook GitlabMergeRequest
-	err := json.Unmarshal(data, &hook)
-	if err != nil {
-		fmt.Printf("Failed to parse request: %s\n", err)
-		return
-	}
-
-	//action : open close merge
-
-	fmt.Println(hook)
-
-	msg := message.MakeMergeMsg(hook.Repository.Name, hook.ObjectAttributes.Action, hook.User.Username,
-		hook.ObjectAttributes.SourceBranch, hook.ObjectAttributes.TargetBranch)
-	workweixin.SendToClient(hook.Repository.Name, msg)
 }

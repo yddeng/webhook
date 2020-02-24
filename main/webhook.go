@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/yddeng/webhook/conf"
-	"github.com/yddeng/webhook/git/gitlab"
+	"github.com/yddeng/webhook/core/git/gitlab"
 	"net/http"
 	"os"
 )

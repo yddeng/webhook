@@ -2,13 +2,41 @@ package robot
 
 import (
 	"fmt"
+	"github.com/yddeng/dutil/queue"
 	"github.com/yddeng/webhook/conf"
 )
 
 var (
-	makers map[string]RobotMaker
-	robots map[string]*Robot
+	makers     = map[string]RobotMaker{}
+	robots     = map[string]*Robot{}
+	eventQueue = queue.NewEventQueue(128, pcall)
 )
+
+type Event struct {
+	Homepage string
+	Cmd      string
+	Args     []string
+}
+
+func PushEvent(e *Event) {
+	_ = eventQueue.Push(e)
+}
+
+func pcall(i interface{}) {
+	e := i.(*Event)
+
+	fmt.Println("pcall", e)
+	r, ok := robots[e.Homepage]
+	if !ok {
+		fmt.Println("no robot", e.Homepage)
+		return
+	}
+
+	if r.checkCmd(e.Cmd) {
+		r.instance.SendToClient(e.Cmd, e.Args...)
+	}
+
+}
 
 type RobotMaker interface {
 	Type() string
@@ -16,7 +44,7 @@ type RobotMaker interface {
 }
 
 type RobotI interface {
-	SendToClient(args ...interface{})
+	SendToClient(cmd string, args ...string)
 }
 
 func RegisterMaker(maker RobotMaker) {
@@ -27,7 +55,16 @@ func RegisterMaker(maker RobotMaker) {
 type Robot struct {
 	homepage string
 	commands []string
-	this     RobotI
+	instance RobotI
+}
+
+func (this *Robot) checkCmd(cmd string) bool {
+	for _, c := range this.commands {
+		if c == cmd {
+			return true
+		}
+	}
+	return false
 }
 
 func InitRobots() {
@@ -43,11 +80,13 @@ func InitRobots() {
 		robot := &Robot{
 			homepage: r.Homepage,
 			commands: r.NotifyCmd,
-			this:     m.Make(r.RobotUrl),
+			instance: m.Make(r.RobotUrl),
 		}
 
 		robots[robot.homepage] = robot
 		fmt.Println("new robot", robot)
 	}
+
+	eventQueue.Run(1)
 
 }

@@ -2,7 +2,7 @@ package workweixin
 
 import (
 	"fmt"
-	"github.com/yddeng/webhook/conf"
+	"github.com/yddeng/webhook/core/event"
 	"github.com/yddeng/webhook/core/robot"
 	"github.com/yddeng/webhook/util"
 )
@@ -30,6 +30,40 @@ import (
 }
 */
 
+var (
+	push_tmp = `**%s**  通知:
+<font color="info">%s</font> 推送了提交到 <font color="info">%s</font> 分支。`
+
+	merge_open_tmp = `**%s**  通知:
+<font color="info">%s</font> 创建了从 <font color="info">%s</font> 到 <font color="info">%s</font> 的合并请求。`
+
+	merge_close_tmp = `**%s**  通知:
+<font color="info">%s</font> 关闭了从 <font color="info">%s</font> 到 <font color="info">%s</font> 的合并请求。`
+
+	merge_merge_tmp = `**%s**  通知:
+<font color="info">%s</font> 通过了从 <font color="info">%s</font> 到 <font color="info">%s</font> 的合并请求。`
+)
+
+func MakePushMsg(project, name, branch string) string {
+	str := fmt.Sprintf(push_tmp, project, name, branch)
+	return str
+}
+
+func MakeMergeMsg(project, action, name, s_branch, t_branch string) string {
+	ret := ""
+
+	switch action {
+	case "open":
+		ret = fmt.Sprintf(merge_open_tmp, project, name, s_branch, t_branch)
+	case "close":
+		ret = fmt.Sprintf(merge_close_tmp, project, name, s_branch, t_branch)
+	case "merge":
+		ret = fmt.Sprintf(merge_merge_tmp, project, name, s_branch, t_branch)
+	default:
+	}
+	return ret
+}
+
 type Message struct {
 	MsgType  string            `json:"msgtype"`
 	Text     map[string]string `json:"text"`
@@ -37,30 +71,36 @@ type Message struct {
 }
 
 type Robot struct {
-	name string
-	url  string
+	tt  string
+	url string
 }
 
-func (this *Robot) SendToClient(name, msg string) {
+func (this *Robot) SendToClient(cmd string, args ...string) {
+
+	msg := ""
+	switch cmd {
+	case event.PushEvent:
+		msg = MakePushMsg(args[0], args[1], args[2])
+	case event.MergeRequest:
+		msg = MakeMergeMsg(args[0], args[1], args[2], args[3], args[4])
+	default:
+		fmt.Println(this.tt, "no cmd", cmd)
+		return
+	}
+
 	req := Message{MsgType: "markdown",
 		Markdown: map[string]string{"content": msg}}
-	//fmt.Println(req)
 
-	robots := conf.GetConfig().Robot
-	for _, r := range robots {
-		if r.Name == name {
-			resp, err := util.PostJson(r.Url, req, 0)
-			if err != nil {
-				fmt.Printf("sendToClient name:%s err:%s\n", r.Name, err)
-				continue
-			}
-			if resp.StatusCode != 200 {
-				fmt.Printf("sendToClient name:%s code:%d\n", r.Name, resp.StatusCode)
-				continue
-			}
-			fmt.Printf("sendToClient name:%s ok\n", r.Name)
-		}
+	resp, err := util.PostJson(this.url, req, 0)
+	if err != nil {
+		fmt.Printf("sendToClient url:%s err:%s\n", this.url, err)
+		return
 	}
+	if resp.StatusCode != 200 {
+		fmt.Printf("sendToClient url:%s code:%d\n", this.url, resp.StatusCode)
+		return
+	}
+	fmt.Printf("sendToClient url:%s ok\n", this.url)
 
 }
 
@@ -72,16 +112,16 @@ func (this *WeixinMaker) Type() string {
 	return this.name
 }
 
-func (this *WeixinMaker) Make(url string) *Robot {
+func (this *WeixinMaker) Make(url string) robot.RobotI {
 	return &Robot{
-		name: this.name,
-		url:  url,
+		tt:  this.name,
+		url: url,
 	}
 }
 
 func init() {
 	m := &WeixinMaker{
-		name: "weixinwork",
+		name: "workweixin",
 	}
 	robot.RegisterMaker(m)
 }
