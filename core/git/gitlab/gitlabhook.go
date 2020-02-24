@@ -53,12 +53,13 @@ func Hook(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Failed to read request: %s\n", err)
 		return
 	}
+	fmt.Println(data)
 
 	var f interface{}
 	_ = json.Unmarshal(data, &f)
 	fmt.Println(f)
 
-	var obj GitLabObj
+	var obj GitlabObj
 	err = json.Unmarshal(data, &obj)
 	if err != nil {
 		fmt.Printf("Failed to parse request: %s\n", err)
@@ -77,7 +78,7 @@ func Hook(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func PushEvent(obj GitLabObj) {
+func PushEvent(obj GitlabObj) {
 
 	sp := strings.Split(obj.Ref, "/")
 	branch := sp[len(sp)-1]
@@ -91,51 +92,13 @@ func PushEvent(obj GitLabObj) {
 	})
 }
 
-func MergeEvent(obj GitLabObj) {
+func MergeEvent(obj GitlabObj) {
 	args := []string{obj.Repository.Name, obj.ObjectAttributes.Action, obj.User.Username,
-		obj.MergeRequest.SourceBranch, obj.MergeRequest.TargetBranch}
+		obj.ObjectAttributes.SourceBranch, obj.ObjectAttributes.TargetBranch}
 
 	robot.PushEvent(&robot.Event{
 		Homepage: obj.Repository.Homepage,
 		Cmd:      event.MergeRequest,
 		Args:     args,
 	})
-}
-
-type GitlabRepository struct {
-	Name     string `json:"name"`
-	Homepage string `json:"homepage"`
-}
-
-type Commit struct {
-	ID        string `json:"id"`
-	Message   string `json:"message"`
-	Timestamp string `json:"timestamp"`
-	URL       string `json:"url"`
-	Author    Author `json:"author"`
-}
-
-type Author struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
-}
-
-type GitlabPush struct {
-	ObjectKind       string           `json:"object_kind"`
-	Ref              string           `json:"ref"`
-	UserUsername     string           `json:"user_username"`
-	Repository       GitlabRepository `json:"repository"`
-	ObjectAttributes ObjectAttributes `json:"object_attributes"`
-	User             User             `json:"user"`
-}
-
-type ObjectAttributes struct {
-	Action       string `json:"action"`
-	SourceBranch string `json:"source_branch"`
-	TargetBranch string `json:"target_branch"`
-}
-
-type User struct {
-	Name     string `json:"name"`
-	Username string `json:"username"`
 }
