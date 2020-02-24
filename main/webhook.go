@@ -5,6 +5,7 @@ import (
 	"github.com/yddeng/webhook/conf"
 	"github.com/yddeng/webhook/core/git/gitlab"
 	"github.com/yddeng/webhook/core/robot"
+	_ "github.com/yddeng/webhook/core/robot/workweixin"
 	"net/http"
 	"os"
 )

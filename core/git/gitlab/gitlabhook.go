@@ -53,11 +53,11 @@ func Hook(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Failed to read request: %s\n", err)
 		return
 	}
-	fmt.Println(data)
+	fmt.Println(string(data))
 
-	var f interface{}
-	_ = json.Unmarshal(data, &f)
-	fmt.Println(f)
+	//var f interface{}
+	//_ = json.Unmarshal(data, &f)
+	//fmt.Println(f)
 
 	var obj GitlabObj
 	err = json.Unmarshal(data, &obj)
