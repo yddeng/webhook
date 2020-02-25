@@ -52,5 +52,5 @@ func StartTcpProxy() {
 		fmt.Println(3, err)
 	}
 
-	fmt.Println("server start on :", addr)
+	fmt.Println("proxy start on :", addr)
 }

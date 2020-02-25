@@ -1,1 +1,1 @@
- nohup ../bin/client ./config.toml > client.log 2>&1 &
+ nohup ../bin/git_client ./config.toml > git_client.log 2>&1 &

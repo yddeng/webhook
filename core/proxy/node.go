@@ -27,6 +27,7 @@ func onLogin(session dnet.Session, msg proto.Message) {
 	nodes, ok := homeNodes[homepage]
 	if !ok {
 		homeNodes[homepage] = map[string]*Node{}
+		nodes = homeNodes[homepage]
 	}
 
 	node, ok := nodes[name]
@@ -44,6 +45,7 @@ func onLogin(session dnet.Session, msg proto.Message) {
 
 	session.SetUserData(node)
 	nodes[node.Name] = node
+	fmt.Println("onlogin", name, homepage)
 }
 
 func onHeartbeat(session dnet.Session, msg proto.Message) {
@@ -82,6 +84,7 @@ func pcall(i interface{}) {
 		i.(func())()
 	case *codec.Event:
 		msg := i.(*codec.Event)
+		fmt.Println("proxy pcall *codec.Event", msg)
 		nodes, ok := homeNodes[msg.GetHomepage()]
 		if ok {
 			for _, n := range nodes {

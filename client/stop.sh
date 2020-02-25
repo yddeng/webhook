@@ -1,1 +1,1 @@
-ps -ef | grep client | grep -v grep | awk '{print $2}' | xargs kill -9
+ps -ef | grep git_client | grep -v grep | awk '{print $2}' | xargs kill -9

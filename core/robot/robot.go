@@ -20,12 +20,12 @@ type Event struct {
 
 func PushEvent(e *Event) {
 	_ = eventQueue.Push(e)
+
 }
 
 func pcall(i interface{}) {
 	e := i.(*Event)
-
-	fmt.Println("pcall", e)
+	fmt.Println("robot pcall i.(*Event)", e)
 	r, ok := robots[e.Homepage]
 	if !ok {
 		fmt.Println("no robot", e.Homepage)
