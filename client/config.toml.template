@@ -1,0 +1,5 @@
+ProxyAddr   = ":42000"      # 代理地址
+Name        = "test"              # 服务器标识
+Homepage    = "https://tech.feiyuapi.com/deng/documents"  # 项目路径
+Branch      = "master"   # 分支事件监听
+ShellPath   = "./command.sh"  # 脚本文件路径
