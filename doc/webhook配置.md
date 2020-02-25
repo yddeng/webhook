@@ -9,11 +9,11 @@ AccessToken = "token"            # token，可不填
 ```
 
 ## Github
-![github-webhooks-1](doc/asset/github-webhooks-1.png)
+![github-webhooks-1](asset/github-webhooks-1.png)
 
 ## Gitlab
-![gilab-webhooks-1](doc/asset/gitlab-webhooks-1.png)
+![gilab-webhooks-1](asset/gitlab-webhooks-1.png)
 
 ## Gitee
-![gitee-webhooks-1](doc/asset/gitee-webhooks-1.png)
+![gitee-webhooks-1](asset/gitee-webhooks-1.png)
 
