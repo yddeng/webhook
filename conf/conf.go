@@ -7,6 +7,7 @@ import (
 
 type Config struct {
 	NetAddr     string   `toml:"NetAddr"`
+	TcpProxyAddr     string   `toml:"TcpProxyAddr"`
 	AccessIP    []string `toml:"AccessIp"`
 	AccessToken string   `toml:"AccessToken"`
 	Robot       []*Robot

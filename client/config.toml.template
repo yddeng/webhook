@@ -1,0 +1,5 @@
+ProxyAddr     = ":42000"      # 代理地址
+Name        = ""              # 服务器标识
+Homepage    = "https://tech.feiyuapi.com/feiyu/teacher"  # 项目路径
+Branch      = "master"   # 分支事件监听
+ShellPath   = "./test.sh"  # 脚本文件路径

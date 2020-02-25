@@ -77,6 +77,11 @@ func InitRobots() {
 			continue
 		}
 
+		if r.RobotUrl == "" || len(r.NotifyCmd) == 0 {
+			fmt.Println("failed url or notifyCmd")
+			continue
+		}
+
 		robot := &Robot{
 			homepage: r.Homepage,
 			commands: r.NotifyCmd,

@@ -2,9 +2,9 @@ package workweixin
 
 import (
 	"fmt"
+	"github.com/yddeng/dutil/dhttp"
 	"github.com/yddeng/webhook/core/event"
 	"github.com/yddeng/webhook/core/robot"
-	"github.com/yddeng/webhook/util"
 )
 
 /*
@@ -91,7 +91,7 @@ func (this *Robot) SendToClient(cmd string, args ...string) {
 	req := Message{MsgType: "markdown",
 		Markdown: map[string]string{"content": msg}}
 
-	resp, err := util.PostJson(this.url, req, 0)
+	resp, err := dhttp.PostJson(this.url, req, 0)
 	if err != nil {
 		fmt.Printf("sendToClient url:%s err:%s\n", this.url, err)
 		return

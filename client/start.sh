@@ -1,0 +1,1 @@
+ nohup ../bin/client ./config.toml > client.log 2>&1 &

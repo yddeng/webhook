@@ -1,0 +1,18 @@
+syntax = "proto2";
+package codec;
+
+message heartbeat {
+    required int64  timestamp = 1;
+}
+
+message Event {
+    required string msgType  = 1;
+    required string homepage = 2;
+    required string branch   = 3;
+}
+
+message login{
+    required string homepage = 1;
+    required string name     = 2;
+}
+
