@@ -77,7 +77,8 @@ func doEvent(e *Event) {
 
 [机器人配置](doc/机器人配置.md)
 
-[事件接收客户端](doc/事件接收客户端.md)
+- configs/proxy
+- configs/node
 
 
 
