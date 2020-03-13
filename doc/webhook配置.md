@@ -3,9 +3,9 @@
 ## 配置文件
 
 ```
-NetAddr     = ":42000"           # hook 地址
-AccessIP    = ["10.128.2.123"]   # IP白名单，可不填
-AccessToken = "token"            # token，可不填
+HookAddr    = ":7845"      # hook 地址
+AccessIP    = []            # IP白名单，可不填
+AccessToken = "token"       # token，可不填
 ```
 
 ## Github
