@@ -1,0 +1,17 @@
+HookAddr    = ":7845"      # hook 地址
+TcpAddr     = ":7856"           # 不配置则不启动代理即没有自动部署事件推送
+AccessIP    = []            # IP白名单，可不填
+AccessToken = "token"       # token，可不填
+
+[[Robot]]
+RobotType   = "workweixin"
+Homepage    = "https://tech.feiyi.com/deng/documts"
+RobotUrl    = "https://qyapi.weixbin/webhook/sen"
+NotifyCmd   = ["push","merge_request"]  # 通知到机器人的事件
+
+
+
+
+
+
+

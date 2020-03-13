@@ -1,1 +1,0 @@
- nohup ../bin/git_client ./config.toml > git_client.log 2>&1 &

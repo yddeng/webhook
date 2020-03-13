@@ -21,35 +21,40 @@ git 支持：
 
 ## 功能设计
 
-**1.事件通知**
+**事件通知**
 
-当我们push 代码到线上仓库，线上仓库必然知道这个push操作，就会hook（回调）这里的url。将事件通知给群机器人。
+当我们push 代码到线上仓库，线上仓库必然知道这个push操作，就会hook（回调）这里的url。
 
+将事件推送到队列，消费事件，机器人通知到群，通知到脚本节点（只推送push事件）。
 ```
-机器人相关配置
-[[Robot]]
-RobotType   = "workweixin"                          机器人类型
-Homepage    = "https://github.com/yddeng/webhook"   项目路径
-RobotUrl    = "fffff"                               机器人的地址
-NotifyCmd   = ["push","merge_request"]              # 通知到机器人的事件
-```
+func doEvent(e *Event) {
 
-git将事件处理后，推送到队列，由机器人消费队列事件。
-```
-func pcall(i interface{}) {
-	e := i.(*Event)
+	r := robot.GetRobot(e.Homepage)
+	if r != nil {
+		r.Notify(e.Cmd, e.Args...)
+	} 
 
-	fmt.Println("pcall", e)
-	r, ok := robots[e.Homepage]
-	if !ok {
-		fmt.Println("no robot", e.Homepage)
-		return
+	if tcpStarted && e.Cmd == common.PushEvent {
+		clients, ok := homeNodes[e.Homepage]
+		if ok {
+            notify := &protocol.Notify{
+			    Cmd:      proto.String(e.Cmd),
+			    Homepage: proto.String(e.Homepage),
+			    Branch:   proto.String(e.Branch),
+		    }
+
+			for _, c := range clients {
+				err := c.Send(notify)
+				if err != nil {
+					doEvent(&Event{
+						Homepage: e.Homepage,
+						Cmd:      common.Message,
+						Args:     []string{c.Name, err.Error()},
+					})
+				}
+			}
+		}
 	}
-
-	if r.checkCmd(e.Cmd) {
-		r.instance.SendToClient(e.Cmd, e.Args...)
-	}
-
 }
 ```
 

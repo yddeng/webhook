@@ -1,0 +1,27 @@
+syntax = "proto2";
+package protocol;
+
+message heartbeat {}
+
+message notify {
+    required string cmd      = 1;
+    required string homepage = 2;
+    required string branch   = 3;
+}
+
+message notifyResp {
+    required string name    = 1;
+    required string message = 2;
+    required string homepage  = 3;
+}
+
+message login{
+    required string name      = 1;
+    repeated string homepages = 2;
+}
+
+message loginResp{
+    required bool   ok  = 1;
+    optional string msg = 2;
+}
+
