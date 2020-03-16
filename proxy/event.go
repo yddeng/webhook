@@ -17,6 +17,7 @@ type Event struct {
 
 func doEvent(e *Event) {
 
+	fmt.Println("doEvent:", *e)
 	r := robot.GetRobot(e.Homepage)
 	if r != nil {
 		err := r.Notify(e.Cmd, e.Args...)
@@ -25,8 +26,6 @@ func doEvent(e *Event) {
 		} else {
 			fmt.Printf("notify homepage:%s ok\n", e.Homepage)
 		}
-	} else {
-		fmt.Println(e.Homepage, "not found robot")
 	}
 
 	if tcpStarted && e.Cmd == common.PushEvent {
