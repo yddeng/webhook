@@ -72,7 +72,7 @@ func MakeMessage(args ...string) string {
 	for _, str := range args {
 		buffer.WriteString(str)
 	}
-	return buffer.String()
+	return fmt.Sprintf(message_tmp, buffer.String())
 }
 
 type Message struct {
