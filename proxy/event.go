@@ -31,6 +31,12 @@ func doEvent(e *Event) {
 	if tcpStarted && e.Cmd == common.PushEvent {
 		clients, ok := homeNodes[e.Homepage]
 		if ok {
+			doEvent(&Event{
+				Homepage: e.Homepage,
+				Cmd:      common.Message,
+				Args:     []string{"需执行脚本节点个数:", fmt.Sprintf("%d", len(clients))},
+			})
+
 			notify := &protocol.Notify{
 				Cmd:      proto.String(e.Cmd),
 				Homepage: proto.String(e.Homepage),
