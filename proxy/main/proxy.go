@@ -24,10 +24,13 @@ func main() {
 	config := conf.GetConfig()
 
 	proxy.InitRobot(config)
-	proxy.ListenTcp(config.TcpAddr)
+	err = proxy.ListenTcp(config.TcpAddr)
+	if err != nil {
+		fmt.Println("ListenTcp err:", err)
+		return
+	}
 
 	fmt.Println("hook start on :", config.HookAddr)
-
 	http.HandleFunc("/githook", gitlab.Hook)
 	http.HandleFunc("/hook/gitlab", gitlab.Hook)
 	err = http.ListenAndServe(config.HookAddr, nil)
@@ -35,5 +38,4 @@ func main() {
 		fmt.Println(err)
 	}
 
-	select {}
 }

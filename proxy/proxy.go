@@ -43,15 +43,14 @@ func InitRobot(config *conf.Config) {
 	}
 }
 
-func ListenTcp(addr string) {
+func ListenTcp(addr string) error {
 	if addr == "" {
-		return
+		return nil
 	}
 
 	l, err := socket.NewTcpListener("tcp", addr)
 	if err != nil {
-		fmt.Println(1, err)
-		return
+		return err
 	}
 
 	tcpStart()
@@ -80,10 +79,11 @@ func ListenTcp(addr string) {
 		}
 	})
 	if err != nil {
-		fmt.Println(3, err)
+		return err
 	}
 
 	fmt.Println("proxy start on :", addr)
+	return nil
 }
 
 func init() {
