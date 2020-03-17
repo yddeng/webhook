@@ -26,6 +26,8 @@ func doEvent(e *Event) {
 		} else {
 			fmt.Printf("notify homepage:%s ok\n", e.Homepage)
 		}
+	} else {
+		fmt.Printf("homepage:%s no robot\n", e.Homepage)
 	}
 
 	if tcpStarted && e.Cmd == common.PushEvent {
