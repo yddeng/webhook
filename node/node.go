@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/yddeng/dnet"
-	"github.com/yddeng/dnet/socket"
+	"github.com/yddeng/dnet/socket/tcp"
 	"github.com/yddeng/dutil/queue"
 	"github.com/yddeng/webhook/codec"
 	conf "github.com/yddeng/webhook/configs/node"
@@ -91,7 +91,7 @@ func (this *Proxy) dial() {
 
 	go func() {
 		for {
-			session, err := socket.TCPDial("tcp", myProxy.RemoteAddr, time.Second*5)
+			session, err := tcp.Dial("tcp", myProxy.RemoteAddr, time.Second*5)
 			if nil == err {
 				this.onConnected(session)
 				return

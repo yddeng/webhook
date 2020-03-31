@@ -3,7 +3,7 @@ package proxy
 import (
 	"fmt"
 	"github.com/yddeng/dnet"
-	"github.com/yddeng/dnet/socket"
+	"github.com/yddeng/dnet/socket/tcp"
 	"github.com/yddeng/dutil/queue"
 	"github.com/yddeng/webhook/codec"
 	conf "github.com/yddeng/webhook/configs/proxy"
@@ -48,14 +48,14 @@ func ListenTcp(addr string) error {
 		return nil
 	}
 
-	l, err := socket.NewTcpListener("tcp", addr)
+	l, err := tcp.NewListener("tcp", addr)
 	if err != nil {
 		return err
 	}
 
 	tcpStart()
 
-	err = l.StartService(func(session dnet.Session) {
+	err = l.Listen(func(session dnet.Session) {
 		fmt.Println("new client", session.RemoteAddr().String())
 
 		session.SetCodec(codec.NewCodec())

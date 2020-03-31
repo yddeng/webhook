@@ -15,34 +15,22 @@
 			"revisionTime": "2019-10-22T19:55:53Z"
 		},
 		{
-			"checksumSHA1": "ajAqUByI39Sfm99F/ZNOguPP3Mk=",
-			"path": "github.com/gorilla/websocket",
-			"revision": "c3e18be99d19e6b3e8f1559eea2c161a665c4b6b",
-			"revisionTime": "2019-08-25T01:20:11Z"
-		},
-		{
-			"checksumSHA1": "vTP9yTDLFLiaDjW876niWeCoL8o=",
+			"checksumSHA1": "Zzp2aDlfqDNGG/PHLtU79sBAo90=",
 			"path": "github.com/yddeng/dnet",
-			"revision": "42512349d2598d8b675a870000f67ba454266d30",
-			"revisionTime": "2020-03-12T09:43:49Z"
+			"revision": "85f28fdb40b8733e5c0a41e02d9c5b699b17c36a",
+			"revisionTime": "2020-03-31T08:57:51Z"
 		},
 		{
-			"checksumSHA1": "OPWHC4SiuT8BdU6DWYgxT1OjpTI=",
+			"checksumSHA1": "t0/xR/mWGuPBaxehEd4umLbGUf8=",
 			"path": "github.com/yddeng/dnet/socket",
-			"revision": "42512349d2598d8b675a870000f67ba454266d30",
-			"revisionTime": "2020-03-12T09:43:49Z"
+			"revision": "85f28fdb40b8733e5c0a41e02d9c5b699b17c36a",
+			"revisionTime": "2020-03-31T08:57:51Z"
 		},
 		{
-			"checksumSHA1": "W7oRR7cu5/Lbc9aJrYE+T9XJxxU=",
-			"path": "github.com/yddeng/dnet/socket/tcpsocket",
-			"revision": "42512349d2598d8b675a870000f67ba454266d30",
-			"revisionTime": "2020-03-12T09:43:49Z"
-		},
-		{
-			"checksumSHA1": "MW4FUie7++a2ByudILvKN930qyQ=",
-			"path": "github.com/yddeng/dnet/socket/websocket",
-			"revision": "42512349d2598d8b675a870000f67ba454266d30",
-			"revisionTime": "2020-03-12T09:43:49Z"
+			"checksumSHA1": "FQA4zv807gaNnfaU6PgjcDZAcuM=",
+			"path": "github.com/yddeng/dnet/socket/tcp",
+			"revision": "85f28fdb40b8733e5c0a41e02d9c5b699b17c36a",
+			"revisionTime": "2020-03-31T08:57:51Z"
 		},
 		{
 			"checksumSHA1": "3ZsCCWzhQzmpzGZNO4EPTZD0Gjo=",
@@ -51,7 +39,7 @@
 			"revisionTime": "2020-03-12T08:32:07Z"
 		},
 		{
-			"checksumSHA1": "u4kPzlpEjP7/TonNbuPBlB2d/xg=",
+			"checksumSHA1": "niF9ErXc2v1m1HObmx5VhxwglrU=",
 			"path": "github.com/yddeng/dutil/dhttp",
 			"revision": "c2f05373f3cb7e0054f570538e50570fcc269223",
 			"revisionTime": "2020-03-12T08:32:07Z"

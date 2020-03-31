@@ -3,84 +3,73 @@ package dhttp
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
-	"strings"
+	"reflect"
 )
 
+type HandlerFunc func(w http.ResponseWriter, msg interface{}) // 回调方法
+
 type HttpServer struct {
-	handler    *http.ServeMux
+	handlers   *http.ServeMux
 	listenAddr string
 }
 
 func NewHttpServer(addr string) *HttpServer {
 	s := new(HttpServer)
-	s.handler = http.NewServeMux()
+	s.handlers = http.NewServeMux()
 	s.listenAddr = addr
 
 	return s
 }
 
-func (s *HttpServer) Register(pattern string, handler func(http.ResponseWriter, *http.Request)) {
-	s.handler.HandleFunc(pattern, handler)
+// post
+// 注册json请求,将请求数据通过json转成对应的结构
+// 路由，结构，方法
+func (s *HttpServer) HandleFuncJson(route string, elem interface{}, fn HandlerFunc) {
+	elemT := reflect.TypeOf(elem)
+
+	s.handlers.HandleFunc(route, func(w http.ResponseWriter, r *http.Request) {
+		msg := reflect.New(elemT.Elem()).Interface()
+		err := json.NewDecoder(r.Body).Decode(&msg)
+		defer r.Body.Close()
+
+		if err != nil {
+			serveError(w, 404, err.Error())
+			return
+		}
+
+		fn(w, msg)
+	})
+}
+
+// get
+// 解析url的地址参数，如果参数不够
+// 路由，参数，方法
+func (s *HttpServer) HandleFuncUrlParam(route string, fn HandlerFunc) {
+	s.handlers.HandleFunc(route, func(w http.ResponseWriter, r *http.Request) {
+		_ = r.ParseForm()
+		fn(w, r.Form)
+	})
+}
+
+// 注册http默认方法
+func (s *HttpServer) Handle(route string, fn http.Handler) {
+	s.handlers.Handle(route, fn)
 }
 
 func (s *HttpServer) Listen() error {
-	return http.ListenAndServe(s.listenAddr, s.handler)
+	return http.ListenAndServe(s.listenAddr, s.handlers)
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		//fmt.Fprintf(w, "Hi, I love you %s", html.EscapeString(r.URL.Path[1:]))
-		r.ParseForm()                    //解析参数，默认是不会解析的
-		fmt.Println("method:", r.Method) //获取请求的方法
+func httpHeader(w *http.ResponseWriter) {
+	//跨域
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")             //允许访问所有域
+	(*w).Header().Add("Access-Control-Allow-Headers", "Content-Type") //header的类型
+	(*w).Header().Set("content-type", "application/json")             //返回数据格式是json
+}
 
-		fmt.Println("username", r.Form["username"])
-		fmt.Println("password", r.Form["password"])
-
-		for k, v := range r.Form {
-			fmt.Print("key:", k, "; ")
-			fmt.Println("val:", strings.Join(v, ""))
-		}
-	} else if r.Method == "POST" {
-		result, _ := ioutil.ReadAll(r.Body)
-		r.Body.Close()
-		fmt.Printf("%s\n", result)
-
-		//未知类型的推荐处理方法
-
-		var f interface{}
-		json.Unmarshal(result, &f)
-		m := f.(map[string]interface{})
-		for k, v := range m {
-			switch vv := v.(type) {
-			case string:
-				fmt.Println(k, "is string", vv)
-			case int:
-				fmt.Println(k, "is int", vv)
-			case float64:
-				fmt.Println(k, "is float64", vv)
-			case []interface{}:
-				fmt.Println(k, "is an array:")
-				for i, u := range vv {
-					fmt.Println(i, u)
-				}
-			default:
-				fmt.Println(k, "is of a type I don't know how to handle")
-			}
-		}
-
-		//结构已知，解析到结构体
-		/*
-			var s Serverslice
-			json.Unmarshal([]byte(result), &s)
-
-			fmt.Println(s.ServersID)
-
-			for i := 0; i < len(s.Servers); i++ {
-				fmt.Println(s.Servers[i].ServerName)
-				fmt.Println(s.Servers[i].ServerIP)
-			}
-		*/
-	}
+func serveError(w http.ResponseWriter, status int, txt string) {
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.WriteHeader(status)
+	fmt.Fprintln(w, txt)
 }
